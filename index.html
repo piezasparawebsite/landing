@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
+    <link rel="manifest" href="favicon/site.webmanifest">
+    <title>Executive Dashboard | TimeFinanceHub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        /* Variables de Color y Estilo */
+        :root {
+            --bg-color: #020617;
+            --text-main: #cbd5e1;
+            --text-muted: #64748b;
+            --gold: #d4af37;
+            --gold-bright: #f9e076;
+            --gold-dark: #b8860b;
+            --glass: rgba(15, 23, 42, 0.8);
+            --border-glass: rgba(212, 175, 55, 0.2);
+            --online: #10b981;
+            --offline: #ef4444;
+        }
+
+        /* Reseteo y Base */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            background-color: var(--bg-color); 
+            color: var(--text-main); 
+            font-family: 'Inter', sans-serif; 
+            min-height: 100vh;
+            line-height: 1.5;
+        }
+        .serif { font-family: 'Playfair Display', serif; }
+
+        /* Header */
+        header { padding: 4rem 1rem 3rem; text-align: center; }
+        .gold-line { 
+            background: linear-gradient(135deg, var(--gold) 0%, var(--gold-bright) 50%, var(--gold-dark) 100%);
+            width: 6rem; height: 2px; margin: 0 auto 1.5rem; opacity: 0.5;
+        }
+        h1 { font-size: 3rem; color: white; letter-spacing: -0.02em; }
+        h1 span { color: var(--gold); }
+        .subtitle { 
+            margin-top: 1rem; color: var(--text-muted); text-transform: uppercase; 
+            letter-spacing: 0.4em; font-size: 10px; font-weight: 600; 
+        }
+
+        /* Layout Principal */
+        main { 
+            max-width: 1200px; margin: 0 auto; padding: 0 1.5rem;
+            display: grid; grid-template-columns: 1fr; gap: 2rem;
+        }
+        @media (min-width: 768px) {
+            main { grid-template-columns: 1fr 300px 1fr; }
+        }
+
+        /* Componentes de Tarjetas */
+        .section-title { 
+            font-size: 10px; font-weight: bold; color: var(--gold); 
+            text-transform: uppercase; letter-spacing: 0.2em; margin-bottom: 1.5rem;
+        }
+        .site-card {
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border-glass);
+            padding: 1.5rem; margin-bottom: 1.5rem;
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+        .site-card:hover { border-color: var(--gold); }
+        .card-header { display: flex; justify-content: space-between; align-items: flex-start; }
+        .card-header.reverse { flex-direction: row-reverse; }
+        .site-link { color: white; text-decoration: none; font-weight: 600; transition: color 0.2s; }
+        .site-link:hover { color: var(--gold); }
+        .card-desc { font-size: 0.75rem; color: var(--text-muted); margin-top: 0.25rem; font-style: italic; }
+        
+        /* Caso especial SQL Gate */
+        .card-special { background: rgba(212, 175, 55, 0.1); border-color: rgba(212, 175, 55, 0.5); }
+        .card-special .site-link { color: var(--gold); font-weight: 800; }
+        .card-special .card-desc { color: rgba(212, 175, 55, 0.7); text-transform: uppercase; font-weight: 600; font-size: 10px; }
+
+        /* Nodo Central */
+        .central-node { 
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            padding: 2rem; border-left: 1px solid rgba(30, 41, 59, 0.5); border-right: 1px solid rgba(30, 41, 59, 0.5);
+        }
+        .spinner-container {
+            width: 8rem; height: 8rem; border-radius: 50%;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            display: flex; align-items: center; justify-content: center;
+            margin-bottom: 1.5rem; position: relative;
+        }
+        .spinner-ring {
+            position: absolute; inset: 0; border-radius: 50%;
+            border-top: 2px solid var(--gold);
+            animation: spin 8s linear infinite;
+        }
+        .status-text { color: white; font-weight: bold; font-size: 1.5rem; text-transform: uppercase; letter-spacing: -1px; }
+        .node-id { font-size: 10px; color: var(--text-muted); }
+        .scan-btn {
+            margin-top: 1.5rem; background: transparent; color: var(--text-muted);
+            border: 1px solid #334155; padding: 0.5rem 1rem; font-size: 10px;
+            cursor: pointer; transition: all 0.3s;
+        }
+        .scan-btn:hover { background: rgba(212, 175, 55, 0.1); color: var(--gold); border-color: var(--gold); }
+
+        /* Estados de los puntos */
+        .status-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+        .online { background-color: var(--online); box-shadow: 0 0 10px var(--online); }
+        .offline { background-color: var(--offline); box-shadow: 0 0 10px var(--offline); }
+        .checking { background-color: #64748b; animation: pulse 1s infinite; }
+
+        /* Animaciones */
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+        /* Footer */
+        footer {
+            margin-top: 5rem; padding: 2rem 0; border-top: 1px solid #0f172a;
+            text-align: center; font-size: 10px; color: #334155;
+            text-transform: uppercase; letter-spacing: 0.8em;
+        }
+
+        /* Alineaciones */
+        .text-right { text-align: right; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="gold-line"></div>
+        <h1 class="serif">TimeFinance<span>Hub</span></h1>
+        <p class="subtitle">Centralización de Activos Digitales & Control Temporal</p>
+    </header>
+
+    <main>
+        <div>
+            <h3 class="section-title" style="margin-left: 0.5rem;">External Assets</h3>
+            
+            <div data-url="https://syntaxsanctuary.com" class="site-card">
+                <div class="card-header">
+                    <a href="https://syntaxsanctuary.com" target="_blank" class="site-link">SyntaxSanctuary</a>
+                    <span class="status-dot checking"></span>
+                </div>
+                <p class="card-desc">The logic foundation.</p>
+            </div>
+
+            <div data-url="https://adaptowebs.com" class="site-card">
+                <div class="card-header">
+                    <a href="https://adaptowebs.com" target="_blank" class="site-link">Adaptowebs</a>
+                    <span class="status-dot checking"></span>
+                </div>
+                <p class="card-desc">Scalable interfaces.</p>
+            </div>
+
+            <div data-url="https://piezas4websites.com" class="site-card">
+                <div class="card-header">
+                    <a href="https://piezas4websites.com" target="_blank" class="site-link">Piezas4Websites</a>
+                    <span class="status-dot checking"></span>
+                </div>
+                <p class="card-desc">Modular components.</p>
+            </div>
+        </div>
+
+        <div class="central-node">
+            <div class="spinner-container">
+                <div class="spinner-ring"></div>
+                <span style="font-size: 2rem;">⏳</span>
+            </div>
+            <div style="text-align: center;">
+                <span id="global-status" class="status-text">Sincronizando</span>
+                <span class="node-id">Node: Zorin_Santuario_v2</span>
+            </div>
+            <button onclick="checkAllStatus()" class="scan-btn">RE-ESCANEAR NODOS</button>
+        </div>
+
+        <div class="text-right">
+            <h3 class="section-title" style="margin-right: 0.5rem;">Core Development</h3>
+            
+            <div data-url="https://piezasparawebsite.github.io/piezasparawebsite/" class="site-card">
+                <div class="card-header reverse">
+                    <a href="https://piezasparawebsite.github.io/piezasparawebsite/" target="_blank" class="site-link" style="font-style: italic;">Status</a>
+                    <span class="status-dot checking"></span>
+                </div>
+                <p class="card-desc">Mercancia.</p>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        Time is Money &bull; Money is Logic &bull; Logic is Power
+    </footer>
+
+    <script>
+        async function checkStatus(card) {
+            const url = card.getAttribute('data-url');
+            const dot = card.querySelector('.status-dot');
+            
+            try {
+                // Simulación de fetch a PHP
+                const response = await fetch(`https://mercancia.store/check_status.php?url=${encodeURIComponent(url)}`);
+                const data = await response.json();
+                
+                dot.className = 'status-dot'; // Reset
+                if(data.status === 'online') {
+                    dot.classList.add('online');
+                } else {
+                    dot.classList.add('offline');
+                }
+            } catch (error) {
+                dot.className = 'status-dot offline';
+            }
+        }
+
+        function checkAllStatus() {
+            document.getElementById('global-status').innerText = "Escaneando...";
+            const cards = document.querySelectorAll('.site-card');
+            
+            const promises = Array.from(cards).map(card => {
+                const dot = card.querySelector('.status-dot');
+                dot.className = 'status-dot checking';
+                return checkStatus(card);
+            });
+
+            Promise.all(promises).then(() => {
+                document.getElementById('global-status').innerText = "Sistema Activo";
+            });
+        }
+
+        window.onload = checkAllStatus;
+    </script>
+</body>
+</html>
