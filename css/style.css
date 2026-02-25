@@ -22,7 +22,14 @@ body {
     line-height: 1.5;
 }
 .serif { font-family: 'Playfair Display', serif; }
-
+.mayusculas {
+    margin-top: 16px; 
+    color: var(--slate-500);
+    text-transform: uppercase; 
+    letter-spacing: 0.4em; 
+    font-size: 10px; 
+    font-weight: 600;
+}
 /* Header */
 header { padding: 4rem 1rem 3rem; text-align: center; }
 .gold-line { 
