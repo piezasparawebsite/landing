@@ -318,5 +318,82 @@
         })();
     </script>
 
+    <script>
+(function() {
+    // 1. Crear el contenedor del botón
+    const wsContainer = document.createElement('div');
+    wsContainer.id = 'ws-btn-injection-layer';
+    
+    // 2. Estilos: Dorado Premium (#D4AF37) y Azul Púrpura Profundo (#0a0a12)
+    const styles = `
+        #ws-direct-link {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(135deg, #0a0a12 0%, #1a1a2e 100%);
+            color: #D4AF37;
+            padding: 14px 28px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+            font-weight: 700;
+            font-size: 14px;
+            border: 1px solid #D4AF37;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 99999;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+        }
+
+        #ws-direct-link:hover {
+            background: #D4AF37;
+            color: #0a0a12;
+            box-shadow: 0 0 25px rgba(212, 175, 55, 0.5);
+            transform: translateY(-4px);
+        }
+
+        #ws-direct-link svg {
+            margin-right: 12px;
+            fill: currentColor;
+            width: 20px;
+            height: 20px;
+        }
+
+        @media (max-width: 480px) {
+            #ws-direct-link {
+                bottom: 20px;
+                right: 20px;
+                padding: 12px 20px;
+                font-size: 12px;
+            }
+        }
+    `;
+
+    const styleSheet = document.createElement("style");
+    styleSheet.innerText = styles;
+    document.head.appendChild(styleSheet);
+
+    // 3. Configuración de API (USA Prefix +1 + Area Code 505)
+    const tel = "15058619970"; 
+    const text = encodeURIComponent("Hola, estoy interesado en concretar uno de tus proyectos.");
+    const apiLink = `https://api.whatsapp.com/send?phone=${tel}&text=${text}`;
+
+    // 4. Estructura del botón
+    wsContainer.innerHTML = `
+        <a href="${apiLink}" target="_blank" rel="noopener noreferrer" id="ws-direct-link">
+            <svg viewBox="0 0 24 24">
+                <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.246 2.248 3.484 5.232 3.484 8.412-.003 6.557-5.338 11.892-11.893 11.892-1.997-.001-3.951-.5-5.688-1.448l-6.309 1.656zm6.29-4.139c1.52.907 3.013 1.362 4.636 1.363 5.405 0 9.803-4.398 9.805-9.805.001-2.628-1.023-5.099-2.885-6.963-1.861-1.864-4.331-2.887-6.958-2.888-5.407 0-9.806 4.399-9.808 9.807-.001 1.761.47 3.476 1.364 4.981l-.997 3.642 3.73-.978zm10.748-7.14c-.078-.131-.29-.21-.61-.371-.32-.161-1.892-.934-2.186-1.042-.294-.108-.508-.162-.722.161-.214.322-.828 1.042-1.015 1.257-.187.215-.373.241-.693.08-.32-.161-1.353-.499-2.577-1.59-.953-.849-1.597-1.9-1.784-2.221-.187-.322-.02-.496.141-.656.144-.144.32-.371.48-.556.16-.185.214-.316.32-.527.107-.211.053-.396-.027-.557-.08-.161-.722-1.741-.99-2.388-.26-.624-.526-.539-.722-.549l-.61-.01c-.214 0-.562.08-.855.403s-1.121 1.094-1.121 2.668 1.148 3.093 1.308 3.308c.16.216 2.26 3.451 5.474 4.839.764.329 1.36.526 1.825.673.769.244 1.468.21 2.021.128.617-.092 1.892-.773 2.159-1.526.267-.754.267-1.399.187-1.531z"></path>
+            </svg>
+            <span>¿Te interesa alguno de mis proyectos?</span>
+        </a>
+    `;
+
+    document.body.appendChild(wsContainer);
+})();
+</script>
+
 </body>
 </html>
